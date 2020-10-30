@@ -1,0 +1,34 @@
+{
+    "name": "scamp/yesido-api",
+    "description": "REST API for the yesido web application",
+    "version": "0.1.0-dev",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Sander Camp",
+            "email": "sander_camp@live.nl",
+            "homepage": "https://github.com/sandercamp",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "email": "sander_camp@live.nl"
+    },
+
+    "autoload": {
+        "psr-4": { "Yesido\\": "src/" },
+        "files": ["constants.php"]
+    },
+
+    "require": {
+        "symfony/http-foundation": "^5.1",
+        "symfony/routing": "^5.1",
+        "php-di/php-di": "^6.3",
+        "symfony/http-kernel": "^5.1",
+        "symfony/mailer": "^5.1"
+    },
+
+    "require-dev": {
+        "phpunit/phpunit": "^9.4"
+    }
+}
