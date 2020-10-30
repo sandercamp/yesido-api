@@ -18,7 +18,10 @@ final class Framework
 
     public function __construct()
     {
-        $container = (new ContainerBuilder())->addDefinitions(DI_DEFINITIONS)->build();
+        $container = (new ContainerBuilder())
+            ->enableCompilation(CACHE)
+            ->addDefinitions(DI_DEFINITIONS)
+            ->build();
 
         $this->urlMatcher = $container->get(UrlMatcher::class);
         $this->controllerResolver = $container->get(ControllerResolver::class);
