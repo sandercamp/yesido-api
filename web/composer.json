@@ -16,7 +16,9 @@
     },
 
     "autoload": {
-        "psr-4": { "Yesido\\": "src/" },
+        "psr-4": { 
+            "Yesido\\": "src/"
+        },
         "files": ["constants.php"]
     },
 

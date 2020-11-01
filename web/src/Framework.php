@@ -4,10 +4,10 @@ namespace Yesido;
 
 use Symfony\Component\HttpFoundation\Response;
 use DI\ContainerBuilder;
-use DI\Container;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
 use Symfony\Component\HttpKernel\Controller\ControllerResolver;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
 
 final class Framework
@@ -19,7 +19,7 @@ final class Framework
     public function __construct()
     {
         $container = (new ContainerBuilder())
-            ->enableCompilation(CACHE)
+            //->enableCompilation(CACHE)
             ->addDefinitions(DI_DEFINITIONS)
             ->build();
 
@@ -27,16 +27,28 @@ final class Framework
         $this->controllerResolver = $container->get(ControllerResolver::class);
         $this->argumentResolver = $container->get(ArgumentResolver::class);
     }
-
+    
+    /**
+     * Matches the request to a controller action
+     *
+     * @param Request $request
+     * @return Response
+     */
     public function handleRequest(Request $request): Response
     {
         $this->urlMatcher->getContext()->fromRequest($request);
 
-        $request->attributes->add($this->urlMatcher->match($request->getPathInfo()));
+        try {
+            $urlMatch = $this->urlMatcher->match($request->getPathInfo());
+        } catch (ResourceNotFoundException $e) {
+            return new Response('', Response::HTTP_NOT_FOUND);
+        }
 
-        $controller = $this->controllerResolver->getController($request);
-        $arguments = $this->argumentResolver->getArguments($request, $controller);
+        $request->attributes->add($urlMatch);
 
-        return call_user_func_array($controller, $arguments);
+        return call_user_func_array(
+            $controller = $this->controllerResolver->getController($request), 
+            $this->argumentResolver->getArguments($request, $controller)
+        );
     }
 }
