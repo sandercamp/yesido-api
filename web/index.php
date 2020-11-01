@@ -9,9 +9,11 @@ require sprintf('%s/vendor/autoload.php', __DIR__);
     function() {
         try {
             (new Framework())
-            ->handleRequest(Request::createFromGlobals())
-            ->send();
+                ->handleRequest(Request::createFromGlobals())
+                ->send();
         } catch (Throwable $t) {
+            throw $t;
+
             header('HTTP/1.1 500 Internal Server Error');
         }
     }
