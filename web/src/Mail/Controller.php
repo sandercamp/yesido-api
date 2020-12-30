@@ -2,6 +2,7 @@
 
 namespace Yesido\Mail;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Mailer;
@@ -21,12 +22,12 @@ class Controller
      *
      * @param Request $request
      * 
-     * @return Response
+     * @return JsonResponse
      */
-    public function rsvp(Request $request): Response
+    public function rsvp(Request $request): JsonResponse
     {
         $this->mailer->send(RsvpMessage::fromRequest($request));
 
-        return new Response('', Response::HTTP_CREATED);
+        return new JsonResponse('', Response::HTTP_CREATED);
     }
 }

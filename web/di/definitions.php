@@ -9,6 +9,7 @@ use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
+use Yesido\ConfigReader;
 use Yesido\Controller;
 use Yesido\Mail\Controller as MailController;
 
@@ -26,14 +27,16 @@ return [
         foreach ($routes as $route) {
             $routeCollection->add(
                 $route['name'], 
-                new Route(
-                    $route['path'], [
-                        '_controller' => [
-                            $container->get($route['controller']), 
-                            $route['method']
+                (new Route($route['path']))
+                    ->addDefaults(
+                        [
+                            '_controller' => [
+                                $container->get($route['controller']), 
+                                $route['method']
+                            ]
                         ]
-                    ]
-                )
+                    )
+                    ->setMethods($route['httpMethods'])
             );
         }
 
@@ -41,6 +44,7 @@ return [
     },
 
     ArgumentResolver::class => DI\autowire(),
+    ConfigReader::class => DI\autowire(),
     Controller::class => DI\autowire(),
     ControllerResolver::class => DI\autowire(),
     MailController::class => DI\autowire(),
