@@ -11,11 +11,13 @@ return [
         'path' => '/status',
         'controller' => Controller::class,
         'method' => 'status',
+        'httpMethods' => ['GET'],
     ],
     [
         'name' => 'rsvp',
         'path' => '/rsvp',
         'controller' => MailController::class,
         'method' => 'rsvp',
+        'httpMethods' => ['POST', 'OPTIONS'],
     ]
 ];
